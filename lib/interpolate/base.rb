@@ -109,7 +109,7 @@ module Interpolate
     #   * the stored blending function, :blend_with
     #   * a call to :interpolate on a key value object
     #
-    def at(point, &block)
+    def at(point, opts={}, &block)
       # obvious cases first
       if @sorted.empty?
         # no key points
@@ -119,13 +119,15 @@ module Interpolate
         return @sorted.first.last
       end
 
-      # out-of-bounds cases next
-      if point <= @min_point
-        # lower than lowest key point
-        return @sorted.first.last
-      elsif point >= @max_point
-        # higher than highest key point
-        return @sorted.last.last
+      if opts[:dont_spread]
+        # out-of-bounds cases next
+        if point <= @min_point
+          # lower than lowest key point
+          return @sorted.first.last
+        elsif point >= @max_point
+          # higher than highest key point
+          return @sorted.last.last
+        end
       end
 
       # binary search to find the right interpolation key point/value interval
