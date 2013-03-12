@@ -119,15 +119,13 @@ module Interpolate
         return @sorted.first.last
       end
 
-      if opts[:dont_spread]
-        # out-of-bounds cases next
-        if point <= @min_point
-          # lower than lowest key point
-          return @sorted.first.last
-        elsif point >= @max_point
-          # higher than highest key point
-          return @sorted.last.last
-        end
+      # out-of-bounds cases next
+      if point <= @min_point
+        # lower than lowest key point
+        return opts[:dont_spread] ? nil : @sorted.first.last
+      elsif point >= @max_point
+        # higher than highest key point
+        return opts[:dont_spread] ? nil : @sorted.last.last
       end
 
       # binary search to find the right interpolation key point/value interval
